@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:web_slider/controller/conts.dart';
+import 'package:web_slider/controller/const.dart';
 import 'package:web_slider/controller/information_controller.dart';
 import 'package:web_slider/model/information_model.dart';
+import 'package:web_slider/utils/url_launch.dart';
 import 'package:web_slider/widgets/arrow_bitton.dart';
 
 void main() {
@@ -39,16 +40,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    for (var _ in data.data) {
-      progress.add(0.0);
-    }
-    _watchingProgress();
+    _initSlider();
   }
 
   @override
   void dispose() {
     super.dispose();
     t!.cancel();
+  }
+
+  _initSlider() {
+    for (var _ in data.data) {
+      progress.add(0.0);
+    }
+    _watchingProgress();
   }
 
   _watchingProgress() {
@@ -67,7 +72,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             for (var _ in data.data) {
               progress.add(0.0);
             }
-            _watchingProgress();
+            _initSlider();
           }
         }
       });
@@ -96,59 +101,62 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          height: 400,
-          width: 700,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                    colors: [Color(0xff4D2C2F), Color(0xff2C293F)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    tileMode: TileMode.decal,
+        child: Center(
+          child: SizedBox(
+            height: 400,
+            width: 700,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: LinearGradient(
+                      colors: [Color(0xff4D2C2F), Color(0xff2C293F)],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      tileMode: TileMode.decal,
+                    ),
                   ),
                 ),
-              ),
-              Positioned(
-                top: positionTop,
-                left: positionLeft,
-                right: positionRight,
-                child: TimerBar(data: data.data, percentage: progress),
-              ),
-              Positioned(
-                top: positionTop + 20,
-                left: 0,
-                right: 0,
-                bottom: positionBottom + 10,
-                child: InformationLayout(
+                Positioned(
+                  top: positionTop,
+                  left: positionLeft,
+                  right: positionRight,
+                  child: TimerBar(data: data.data, percentage: progress),
+                ),
+                Positioned(
+                  top: positionTop + 20,
+                  left: 0,
+                  right: 0,
+                  bottom: positionBottom + 10,
+                  child: InformationLayout(
                     data: data.data,
                     previousArrowEvent: previousSlide,
                     nextArrowEvent: nextSlide,
-                    pageController: pageController),
-              ),
-              Positioned(
-                top: positionTop + 20,
-                left: positionLeft + 10,
-                child: PlayPause(
-                  startStop: () {
-                    // _watchingProgress();
-                    // if (t!.isActive == false) {
-                    // } else {
-                    //   t!.cancel();
-                    // }
-                  },
+                    pageController: pageController,
+                  ),
                 ),
-              ),
-            ],
+                // Positioned(
+                //   top: positionTop + 20,
+                //   left: positionLeft + 10,
+                //   child: PlayPause(
+                //     startStop: () {
+                //       // _watchingProgress();
+                //       // if (t!.isActive == false) {
+                //       // } else {
+                //       //   t!.cancel();
+                //       // }
+                //     },
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),
@@ -240,9 +248,10 @@ class _InformationCardTileState extends State<InformationCardTile> {
       children: [
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 30, width: 30),
               Text(
                 widget.data.title.toString(),
                 style: TextStyle(
@@ -254,7 +263,6 @@ class _InformationCardTileState extends State<InformationCardTile> {
                 ),
                 overflow: TextOverflow.fade,
               ),
-              const SizedBox(height: 50.0),
               Row(
                 children: [
                   Text(
@@ -277,20 +285,25 @@ class _InformationCardTileState extends State<InformationCardTile> {
                         linkHover = false;
                       });
                     },
-                    child: AnimatedContainer(
-                      duration: Duration(milliseconds: 200),
-                      padding: EdgeInsets.symmetric(horizontal: linkHover ? 12 : 10, vertical: linkHover ? 7 : 5),
-                      decoration: BoxDecoration(
-                        color: linkHover ? Colors.black.withOpacity(0.5) : Colors.white.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white, width: 0.5),
-                      ),
-                      child: Text(
-                        widget.data.sourceUrl.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 9,
-                          fontWeight: FontWeight.w400,
+                    child: InkWell(
+                      onTap: () {
+                        UrlLaunch.launchInBrowser(url: 'https://' + widget.data.sourceUrl.toString());
+                      },
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 200),
+                        padding: EdgeInsets.symmetric(horizontal: linkHover ? 12 : 10, vertical: linkHover ? 7 : 5),
+                        decoration: BoxDecoration(
+                          color: linkHover ? Colors.black.withOpacity(0.5) : Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.white, width: 0.5),
+                        ),
+                        child: Text(
+                          widget.data.sourceUrl.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 9,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),
@@ -347,53 +360,58 @@ class _InfoImagesState extends State<InfoImages> {
           isHover = false;
         });
       },
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              widget.imagesData.imageUrl.toString(),
+      child: InkWell(
+        onTap: () {
+          UrlLaunch.launchInBrowser(url: widget.imagesData.imageUrl.toString());
+        },
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                widget.imagesData.imageUrl.toString(),
+                height: double.infinity,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+            AnimatedContainer(
+              duration: Duration(milliseconds: 200),
               height: double.infinity,
               width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          AnimatedContainer(
-            duration: Duration(milliseconds: 200),
-            height: double.infinity,
-            width: double.infinity,
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.symmetric(horizontal: isHover ? 12 : 10, vertical: isHover ? 7 : 5),
-            decoration: BoxDecoration(
-              color: isHover ? Colors.black.withOpacity(0.3) : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: isHover
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.imagesData.source.toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
+              alignment: Alignment.bottomCenter,
+              padding: EdgeInsets.symmetric(horizontal: isHover ? 12 : 10, vertical: isHover ? 7 : 5),
+              decoration: BoxDecoration(
+                color: isHover ? Colors.black.withOpacity(0.3) : Colors.transparent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: isHover
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.imagesData.source.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 10.0),
-                      Icon(
-                        Icons.ads_click,
-                        color: Colors.white,
-                        size: 15,
-                      )
-                    ],
-                  )
-                : SizedBox(),
-          )
-        ],
+                        const SizedBox(width: 10.0),
+                        Icon(
+                          Icons.ads_click,
+                          color: Colors.white,
+                          size: 15,
+                        )
+                      ],
+                    )
+                  : SizedBox(),
+            )
+          ],
+        ),
       ),
     );
   }

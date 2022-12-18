@@ -21,7 +21,7 @@ class InformationController {
       ],
     ),
     InformationModel(
-      'A color scheme is a combination of colors that create a harmonious and appealing visual effect.',
+      'Color schemes can be used for various purposes, such as web design, interior design, art, fashion, and branding.',
       sourceUrl,
       [
         ListOfImages(
@@ -39,7 +39,7 @@ class InformationController {
       ],
     ),
     InformationModel(
-      'A color scheme is a combination of colors that create a harmonious and appealing visual effect.',
+      'SchemeColor.com is a website that offers thousands of ready-made and custom color schemes that can be downloaded, created, and shared online.',
       sourceUrl,
       [
         ListOfImages(
@@ -57,7 +57,7 @@ class InformationController {
       ],
     ),
     InformationModel(
-      'A color scheme is a combination of colors that create a harmonious and appealing visual effect.',
+      'The website allows users to browse color schemes by categories, such as red, orange, pink, purple, blue, green, yellow, violet, and gray.',
       sourceUrl,
       [
         ListOfImages(
@@ -75,7 +75,7 @@ class InformationController {
       ],
     ),
     InformationModel(
-      'A color scheme is a combination of colors that create a harmonious and appealing visual effect.',
+      'Users can also search for color schemes by keywords, such as valentine, wedding, exterior painting, or color scheme from images.',
       sourceUrl,
       [
         ListOfImages(
@@ -93,7 +93,7 @@ class InformationController {
       ],
     ),
     InformationModel(
-      'A color scheme is a combination of colors that create a harmonious and appealing visual effect.',
+      'SchemeColor.com also provides detailed information on hexadecimal, RGB, and CMYK color codes, as well as color theory, tips, and trends.',
       sourceUrl,
       [
         ListOfImages(
