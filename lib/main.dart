@@ -96,64 +96,59 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: SizedBox(
-            height: 300,
-            width: 600,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                      colors: [Color(0xff4D2C2F), Color(0xff2C293F)],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      tileMode: TileMode.decal,
-                    ),
+        child: SizedBox(
+          height: 400,
+          width: 700,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                    colors: [Color(0xff4D2C2F), Color(0xff2C293F)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    tileMode: TileMode.decal,
                   ),
                 ),
-                Positioned(
-                  top: positionTop,
-                  left: positionLeft,
-                  right: positionRight,
-                  child: TimerBar(
-                    data: data.data,
-                    percentage: progress,
-                  ),
-                ),
-                Positioned(
-                  top: positionTop + 20,
-                  left: 0,
-                  right: 0,
-                  bottom: positionBottom + 10,
-                  child: InformationLayout(
+              ),
+              Positioned(
+                top: positionTop,
+                left: positionLeft,
+                right: positionRight,
+                child: TimerBar(data: data.data, percentage: progress),
+              ),
+              Positioned(
+                top: positionTop + 20,
+                left: 0,
+                right: 0,
+                bottom: positionBottom + 10,
+                child: InformationLayout(
                     data: data.data,
                     previousArrowEvent: previousSlide,
                     nextArrowEvent: nextSlide,
-                    pageController: pageController,
-                  ),
+                    pageController: pageController),
+              ),
+              Positioned(
+                top: positionTop + 20,
+                left: positionLeft + 10,
+                child: PlayPause(
+                  startStop: () {
+                    // _watchingProgress();
+                    // if (t!.isActive == false) {
+                    // } else {
+                    //   t!.cancel();
+                    // }
+                  },
                 ),
-                Positioned(
-                  top: positionTop + 20,
-                  left: positionLeft + 10,
-                  child: PlayPause(
-                    startStop: () {
-                      _watchingProgress();
-                      if (t!.isActive == false) {
-                      } else {
-                        t!.cancel();
-                      }
-                    },
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -306,20 +301,22 @@ class _InformationCardTileState extends State<InformationCardTile> {
           ),
         ),
         Expanded(
-          child: GridView.custom(
-            gridDelegate: SliverStairedGridDelegate(
-              crossAxisSpacing: 48,
-              mainAxisSpacing: 24,
-              startCrossAxisDirectionReversed: true,
-              pattern: [
-                StairedGridTile(0.5, 1),
-                StairedGridTile(0.5, 1),
-                StairedGridTile(0.5, 1),
-              ],
+          child: Center(
+            child: GridView.custom(
+              gridDelegate: SliverStairedGridDelegate(
+                crossAxisSpacing: 40,
+                mainAxisSpacing: 30,
+                startCrossAxisDirectionReversed: true,
+                pattern: [
+                  StairedGridTile(0.5, 1),
+                  StairedGridTile(0.5, 1),
+                  StairedGridTile(0.5, 1),
+                ],
+              ),
+              childrenDelegate: SliverChildBuilderDelegate(
+                  (context, i) => InfoImages(imagesData: widget.data.imagesData![i]),
+                  childCount: widget.data.imagesData!.length),
             ),
-            childrenDelegate: SliverChildBuilderDelegate(
-                (context, i) => InfoImages(imagesData: widget.data.imagesData![i]),
-                childCount: widget.data.imagesData!.length),
           ),
         )
       ],
@@ -372,26 +369,29 @@ class _InfoImagesState extends State<InfoImages> {
               color: isHover ? Colors.black.withOpacity(0.3) : Colors.transparent,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  widget.imagesData.source.toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Icon(
-                  Icons.link,
-                  color: Colors.white,
-                  size: 10,
-                )
-              ],
-            ),
+            child: isHover
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.imagesData.source.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(width: 10.0),
+                      Icon(
+                        Icons.ads_click,
+                        color: Colors.white,
+                        size: 15,
+                      )
+                    ],
+                  )
+                : SizedBox(),
           )
         ],
       ),
