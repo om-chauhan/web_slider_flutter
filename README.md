@@ -1,6 +1,6 @@
 <!-- @format -->
 
-# Web Slider
+# Web Slider Flutter
 
 Flutter Web Slider Inspired by Microsoft Bing Search Engine 👇
 
