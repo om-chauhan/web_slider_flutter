@@ -8,10 +8,13 @@ Install, run the development server:
 
 ```bash
 1. git clone https://github.com/om-chauhan/web_slider_flutter.git
+```
+```bash
 2. flutter pub get
+```
+```bash
 3. flutter run
 ```
-
 
 ## 👤 Screenshots
 
